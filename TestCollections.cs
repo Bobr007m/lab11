@@ -68,7 +68,7 @@ namespace PerformanceTesting
             sw.Start();
             bool contains = collection.Contains(element);
             sw.Stop();
-            Console.WriteLine($"{collectionName}: поиск элемента {(contains ? "найден" : "не найден")} за {sw.ElapsedTicks} тиков.");
+            Console.WriteLine($"{collectionName}: поиск элемента {(contains ? "найден" : "не найден")} за {sw.ElapsedTicks}");
         }
 
         private IGeometricFigure GetMiddleElement(SortedSet<IGeometricFigure> set)

@@ -53,9 +53,42 @@ namespace NonGenericCollections
                 if (item is IShowable showableSorted)
                     showableSorted.Show();
             }
+            // Запрос 1: Количество прямоугольников
+            int rectangleCount = 0;
+            foreach (var item in stack)
+            {
+                if (item is Rectangle1)
+                {
+                    rectangleCount++;
+                }
+            }
+            Console.WriteLine($"\nКоличество прямоугольников в стеке: {rectangleCount}");
+
+            // Запрос 2: Печать всех прямоугольников
+            Console.WriteLine("\nВсе прямоугольники в стеке:");
+            foreach (var item in stack)
+            {
+                if (item is Rectangle1 rect)
+                {
+                    Console.WriteLine(rect);
+                }
+            }
+
+            // Запрос 3: Поиск прямоугольника с максимальной площадью
+            Rectangle1 maxAreaRect = null;
+            double maxArea = 0;
+            foreach (var item in stack)
+            {
+                if (item is Rectangle1 rect && rect.Area() > maxArea)
+                {
+                    maxArea = rect.Area();
+                    maxAreaRect = rect;
+                }
+            }
+            Console.WriteLine($"\nПрямоугольник с максимальной площадью: {maxAreaRect}");
             // 2 задание
-                // Создание словаря
-                SortedDictionary<string, IGeometricFigure1> dictionary = new SortedDictionary<string, IGeometricFigure>();
+            // Создание словаря
+            SortedDictionary<string, IGeometricFigure1> dictionary = new SortedDictionary<string, IGeometricFigure>();
 
                 // Добавление объектов
                 dictionary.Add("Circle1", new Circle1(5));
