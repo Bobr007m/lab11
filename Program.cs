@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Geometryclass;
+using PerformanceTesting;
 
 namespace NonGenericCollections
 {
@@ -13,9 +14,11 @@ namespace NonGenericCollections
             Stack stack = new Stack();
 
             // Добавление объектов
-            stack.Push(new Circle1(5));
-            stack.Push(new Parallelepiped1(10));
-            stack.Push(new Rectangle1(4, 6));
+            stack.Push(new Rectangle1 { Length = 5, Width = 10 });
+            stack.Push(new Rectangle1 { Length = 3, Width = 7 });
+            stack.Push(new Rectangle1 { Length = 8, Width = 4 });
+
+            
 
             Console.WriteLine("Элементы в стеке:");
             foreach (var item in stack)
@@ -88,7 +91,7 @@ namespace NonGenericCollections
             Console.WriteLine($"\nПрямоугольник с максимальной площадью: {maxAreaRect}");
             // 2 задание
             // Создание словаря
-            SortedDictionary<string, IGeometricFigure1> dictionary = new SortedDictionary<string, IGeometricFigure>();
+            SortedDictionary<string, IGeometricFigure1> dictionary = new SortedDictionary<string, IGeometricFigure1>();
 
                 // Добавление объектов
                 dictionary.Add("Circle1", new Circle1(5));
@@ -113,7 +116,7 @@ namespace NonGenericCollections
 
                 // Клонирование коллекции
                 Console.WriteLine("\nКлонирование словаря:");
-                SortedDictionary<string, IGeometricFigure> clonedDictionary = new SortedDictionary<string, IGeometricFigure>(dictionary);
+                SortedDictionary<string, IGeometricFigure1> clonedDictionary = new SortedDictionary<string, IGeometricFigure1>(dictionary);
                 foreach (var kvp in clonedDictionary)
                 {
                     Console.WriteLine($"{kvp.Key}:");
@@ -122,6 +125,19 @@ namespace NonGenericCollections
 
                 // Сортировка (автоматическая в SortedDictionary)
                 Console.WriteLine("\nСловарь уже отсортирован по ключам.");
+            List<Rectangle1> rectangles = new List<Rectangle1>
+            {
+                new Rectangle1 { Length = 5, Width = 10 },
+                new Rectangle1 { Length = 3, Width = 7 },
+                new Rectangle1 { Length = 8, Width = 4 }
+            };
+
+            // Перебор элементов
+            Console.WriteLine("Элементы списка:");
+            foreach (var rect in rectangles)
+            {
+                Console.WriteLine(rect);
+            }
             // Запрос 1: Количество прямоугольников
             Console.WriteLine($"\nКоличество прямоугольников в списке: {rectangles.Count}");
 
@@ -134,7 +150,7 @@ namespace NonGenericCollections
 
             // Запрос 3: Поиск прямоугольника с минимальной площадью
             Rectangle1 minAreaRect = rectangles[0];
-            foreach (var rect in rectangles)
+            foreach (var rect in dictionary)
             {
                 if (rect.Area() < minAreaRect.Area())
                 {
