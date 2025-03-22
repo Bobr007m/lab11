@@ -122,9 +122,30 @@ namespace NonGenericCollections
 
                 // Сортировка (автоматическая в SortedDictionary)
                 Console.WriteLine("\nСловарь уже отсортирован по ключам.");
-           // 3 задание
+            // Запрос 1: Количество прямоугольников
+            Console.WriteLine($"\nКоличество прямоугольников в списке: {rectangles.Count}");
+
+            // Запрос 2: Печать всех прямоугольников
+            Console.WriteLine("\nВсе прямоугольники в списке:");
+            foreach (var rect in rectangles)
+            {
+                Console.WriteLine(rect);
+            }
+
+            // Запрос 3: Поиск прямоугольника с минимальной площадью
+            Rectangle1 minAreaRect = rectangles[0];
+            foreach (var rect in rectangles)
+            {
+                if (rect.Area() < minAreaRect.Area())
+                {
+                    minAreaRect = rect;
+                }
+            }
+            Console.WriteLine($"\nПрямоугольник с минимальной площадью: {minAreaRect}");
+            // 3 задание
+            // Создаем тестовые коллекции с 1000 элементами
             TestCollections test = new TestCollections(1000);
-            test.MeasurePerformance();
+            test.MeasureSearchTime();
         }
         }
     }

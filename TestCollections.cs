@@ -6,81 +6,82 @@ namespace PerformanceTesting
 {
     public class TestCollections
     {
-        public SortedSet<IGeometricFigure> Collection1 { get; set; }
-        public SortedSet<string> Collection2 { get; set; }
-        public HashSet<IGeometricFigure> Collection3 { get; set; }
-        public HashSet<string> Collection4 { get; set; }
+        public SortedSet<Rectangle1> Collection1 { get; } = new SortedSet<Rectangle1>();
+        public SortedSet<string> Collection2 { get; } = new SortedSet<string>();
+        public HashSet<Geometryfigure1> Collection3 { get; } = new HashSet<Geometryfigure1>();
+        public HashSet<string> Collection4 { get; } = new HashSet<string>();
 
+        // Конструктор с генерацией 1000 элементов
         public TestCollections(int size)
         {
-            Collection1 = new SortedSet<IGeometricFigure>();
-            Collection2 = new SortedSet<string>();
-            Collection3 = new HashSet<IGeometricFigure>();
-            Collection4 = new HashSet<string>();
-
-            Random rand = new Random();
+            Random rnd = new Random();
             for (int i = 0; i < size; i++)
             {
-                var figure = new Circle(rand.Next(1, 100));
-                Collection1.Add(figure);
-                Collection2.Add(figure.ToString());
-                Collection3.Add(figure);
-                Collection4.Add(figure.ToString());
+                var rect = new Rectangle1(rnd.Next(1, 100), rnd.Next(1, 100));
+
+                // Заполнение коллекций
+                Collection1.Add(rect);
+                Collection2.Add(rect.ToString());
+                Collection3.Add(rect.BaseFigure); // Используем свойство BaseFigure
+                Collection4.Add(rect.BaseFigure.ToString());
             }
         }
 
-        public void MeasurePerformance()
+        // Метод измерения времени поиска
+        public void MeasureSearchTime()
         {
-            Stopwatch sw = new Stopwatch();
+            // Выбор элементов для поиска
+            var first = Collection1.Min;
+            var middle = GetElementAt(Collection1, Collection1.Count / 2);
+            var last = Collection1.Max;
+            var nonExistent = new Rectangle1(999, 999);
 
-            // Первый элемент
-            var firstElement = Collection1.Min;
-            MeasureTime(Collection1, firstElement, "SortedSet<T>");
-            MeasureTime(Collection2, firstElement.ToString(), "SortedSet<string>");
-            MeasureTime(Collection3, firstElement, "HashSet<T>");
-            MeasureTime(Collection4, firstElement.ToString(), "HashSet<string>");
+            // Замеры времени
+            Console.WriteLine("Поиск первого элемента:");
+            Measure(() => Collection1.Contains(first), "Collection1");
+            Measure(() => Collection3.Contains(first.BaseFigure), "Collection3");
 
-            // Центральный элемент
-            var middleElement = GetMiddleElement(Collection1);
-            MeasureTime(Collection1, middleElement, "SortedSet<T>");
-            MeasureTime(Collection2, middleElement.ToString(), "SortedSet<string>");
-            MeasureTime(Collection3, middleElement, "HashSet<T>");
-            MeasureTime(Collection4, middleElement.ToString(), "HashSet<string>");
+            Console.WriteLine("\nПоиск центрального элемента:");
+            Measure(() => Collection1.Contains(middle), "Collection1");
+            Measure(() => Collection3.Contains(middle.BaseFigure), "Collection3");
 
-            // Последний элемент
-            var lastElement = Collection1.Max;
-            MeasureTime(Collection1, lastElement, "SortedSet<T>");
-            MeasureTime(Collection2, lastElement.ToString(), "SortedSet<string>");
-            MeasureTime(Collection3, lastElement, "HashSet<T>");
-            MeasureTime(Collection4, lastElement.ToString(), "HashSet<string>");
+            Console.WriteLine("\nПоиск последнего элемента:");
+            Measure(() => Collection1.Contains(last), "Collection1");
+            Measure(() => Collection3.Contains(last.BaseFigure), "Collection3");
 
-            // Элемент, которого нет
-            var nonExistent = new Circle(1000);
-            MeasureTime(Collection1, nonExistent, "SortedSet<T>");
-            MeasureTime(Collection2, nonExistent.ToString(), "SortedSet<string>");
-            MeasureTime(Collection3, nonExistent, "HashSet<T>");
-            MeasureTime(Collection4, nonExistent.ToString(), "HashSet<string>");
+            Console.WriteLine("\nПоиск несуществующего элемента:");
+            Measure(() => Collection1.Contains(nonExistent), "Collection1");
+            Measure(() => Collection3.Contains(nonExistent.BaseFigure), "Collection3");
         }
 
-        private void MeasureTime<T>(ICollection<T> collection, T element, string collectionName)
+        // Вспомогательный метод для получения элемента по индексу
+        private T GetElementAt<T>(SortedSet<T> set, int index)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            bool contains = collection.Contains(element);
-            sw.Stop();
-            Console.WriteLine($"{collectionName}: поиск элемента {(contains ? "найден" : "не найден")} за {sw.ElapsedTicks}");
-        }
-
-        private IGeometricFigure GetMiddleElement(SortedSet<IGeometricFigure> set)
-        {
-            int index = set.Count / 2;
-            int i = 0;
+            int count = 0;
             foreach (var item in set)
             {
-                if (i == index) return item;
-                i++;
+                if (count == index) return item;
+                count++;
             }
-            return null;
+            return default;
+        }
+
+        // Метод для многократного замера времени
+        private void Measure(Action action, string collectionName)
+        {
+            Stopwatch sw = new Stopwatch();
+            long totalTime = 0;
+            int iterations = 1000;
+
+            for (int i = 0; i < iterations; i++)
+            {
+                sw.Restart();
+                action();
+                sw.Stop();
+                totalTime += sw.ElapsedTicks;
+            }
+
+            Console.WriteLine($"{collectionName}: {totalTime / iterations} тиков (среднее)");
         }
     }
 }
