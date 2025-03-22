@@ -14,12 +14,10 @@ namespace NonGenericCollections
             Stack stack = new Stack();
 
             // Добавление объектов
-            stack.Push(new Rectangle1 { Length = 5, Width = 10 });
-            stack.Push(new Rectangle1 { Length = 3, Width = 7 });
-            stack.Push(new Rectangle1 { Length = 8, Width = 4 });
-
+            stack.Push(new Rectangle1(5.0, 10.0));
+            stack.Push(new Rectangle1(3, 7));
+            stack.Push(new Rectangle1(8, 4));
             
-
             Console.WriteLine("Элементы в стеке:");
             foreach (var item in stack)
             {
@@ -127,9 +125,9 @@ namespace NonGenericCollections
                 Console.WriteLine("\nСловарь уже отсортирован по ключам.");
             List<Rectangle1> rectangles = new List<Rectangle1>
             {
-                new Rectangle1 { Length = 5, Width = 10 },
-                new Rectangle1 { Length = 3, Width = 7 },
-                new Rectangle1 { Length = 8, Width = 4 }
+                new Rectangle1 (5.0, 10.0),
+                new Rectangle1(3, 7),
+                new Rectangle1 (8, 4)
             };
 
             // Перебор элементов
@@ -152,7 +150,7 @@ namespace NonGenericCollections
             Rectangle1 minAreaRect = rectangles[0];
             foreach (var rect in dictionary)
             {
-                if (rect.Area() < minAreaRect.Area())
+                if (rect.Value.Area() < minAreaRect.Area())
                 {
                     minAreaRect = rect;
                 }
