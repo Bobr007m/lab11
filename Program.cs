@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Geometryclass;
 using PerformanceTesting;
 
@@ -10,13 +11,38 @@ namespace NonGenericCollections
     {
         static void Main()
         {
-            DemonstrateStackOperations();
+            try
+            {
+                Console.WriteLine("Тестирование производительности коллекций");
+                Console.WriteLine("----------------------------------------\n");
+
+                // Создаем коллекции с 1000 элементов
+                var testCollections = new TestCollections(1000);
+                Console.WriteLine("Коллекции успешно созданы (по 1000 элементов в каждой)\n");
+
+                // Измеряем время поиска
+                Console.WriteLine("Начинаем измерение времени поиска...");
+                var stopwatch = Stopwatch.StartNew();
+                testCollections.MeasureSearchTime();
+                stopwatch.Stop();
+
+                Console.WriteLine($"\nВсе измерения завершены. Общее время выполнения: {stopwatch.ElapsedMilliseconds} мс");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\nПроизошла ошибка: {ex.Message}");
+            }
+
+            Console.WriteLine("\nНажмите любую клавишу для выхода...");
+            Console.ReadKey();
+        DemonstrateStackOperations();
             DemonstrateDictionaryOperations();
             RunPerformanceTest();
         }
 
         static void DemonstrateStackOperations()
         {
+
             try
             {
                 // 1. Создание и заполнение стека
@@ -185,7 +211,7 @@ namespace NonGenericCollections
                 RemoveFromDictionaryByValue(dictionary, new Circle1(5));
 
                 // 4. Поиск элемента по значению
-                SearchInDictionaryByValue(dictionary, new Parallelepiped1(10));
+                SearchInDictionaryByValue(dictionary, new Parallelepiped1(10, 5, 3));
 
                 // 5. Глубокое клонирование
                 var clonedDictionary = DeepCloneDictionary(dictionary);
@@ -207,7 +233,7 @@ namespace NonGenericCollections
         {
             var dictionary = new SortedDictionary<string, IGeometricFigure1>();
             dictionary.Add("Circle1", new Circle1(5));
-            dictionary.Add("Parallelepiped1", new Parallelepiped1(10));
+            dictionary.Add("Parallelepiped1", new Parallelepiped1(10, 5 , 3));
             dictionary.Add("Rectangle1", new Rectangle1(4, 6));
             return dictionary;
         }
